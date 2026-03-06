@@ -349,26 +349,39 @@ Actualízalo cada vez que el sistema de diseño evolucione.*
 
 ## Fase 3: Validación
 
-Después de entregar el DSD, presenta este mensaje al usuario:
+**Paso 1 — Preguntar ubicación:**
+Antes de guardar, envía este mensaje al usuario:
 
-> El DSD está generado (v[X.X]). Antes de aprobarlo, revisa:
->
-> - [ ] **Colores:** ¿Los valores hex son exactos o aproximaciones?
-> - [ ] **Tipografía:** ¿Las fuentes nombradas son las reales del proyecto?
-> - [ ] **Logos:** ¿Las variantes documentadas son las correctas?
-> - [ ] **Stack:** ¿El stack está completo y correcto?
-> - [ ] **Tokens de implementación:** ¿El formato es el correcto para tu stack?
-> - [ ] **Pendientes:** ¿Hay campos marcados como `[pendiente]`?
-> - [ ] **Conflictos (si usaste Entrada 4):** ¿Todos fueron resueltos?
->
-> ¿Dónde quieres guardar el `DESIGN_SYSTEM.md`? Opciones:
+> ¿Dónde quieres guardar el `DESIGN_SYSTEM.md`?
 > - **Raíz del proyecto** — máxima visibilidad, fácil de encontrar
-> - **`/docs/`** — si el proyecto ya tiene carpeta de documentación
+> - **`docs/`** — si el proyecto ya tiene carpeta de documentación
 > - **`.frontera/`** — junto a los assets de diseño
 
+**Paso 2 — Guardar el borrador:**
+- Si tienes acceso al sistema de archivos, escribe el DSD en la ruta elegida
+  con `estado: borrador`. Confirma al usuario la ruta donde quedó guardado.
+- Si no tienes acceso, muestra el DSD completo en un bloque de código e indica
+  al usuario que lo guarde manualmente en esa ruta.
+
+**Paso 3 — Checklist de revisión:**
+Presenta solo los ítems aplicables — omite los que correspondan a secciones
+en `[pendiente]` o que no apliquen al flujo usado:
+
+> El borrador está en `[ruta]`. Ábrelo y revisa:
+>
+> - [ ] **Colores:** ¿Los valores hex son exactos o aproximaciones? *(omitir si todos son `[pendiente]`)*
+> - [ ] **Tipografía:** ¿Las fuentes nombradas son las reales? *(omitir si está en `[pendiente]`)*
+> - [ ] **Logos:** ¿Las variantes documentadas son correctas? *(omitir si no hay logos)*
+> - [ ] **Stack:** ¿Está completo y correcto? *(omitir si está en `[pendiente]`)*
+> - [ ] **Tokens:** ¿El formato es el correcto para tu stack? *(omitir si el stack no fue declarado)*
+> - [ ] **Pendientes:** ¿Hay campos `[pendiente]` que puedas completar ahora?
+> - [ ] **Conflictos:** ¿Todos fueron resueltos? *(solo para Entrada 4)*
+>
+> Responde con correcciones específicas o escribe **"aprobado"**.
+
 **Ciclo de corrección:** Si el usuario indica correcciones, actualiza únicamente
-los campos señalados y re-presenta el checklist. Repite hasta recibir aprobación
-explícita.
+los campos señalados en el archivo (o en el bloque de código) y confirma los
+cambios. Repite hasta recibir aprobación explícita.
 
 **Al aprobar:**
 1. Actualiza `estado: borrador → aprobado` en el frontmatter del DSD.
