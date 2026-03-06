@@ -245,7 +245,7 @@ Añade los fundamentales según el tipo de proyecto:
 - App móvil → Button, Input, NavigationBar
 - Landing estática → Button, Hero, Footer
 
----
+**Plantilla obligatoria — completa todos los campos con los datos recopilados:**
 
 ```markdown
 ---

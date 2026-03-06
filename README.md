@@ -1,5 +1,9 @@
 # Frontera
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-V1-green?style=flat-square)](Frontera_V1.md)
+[![AI Agnostic](https://img.shields.io/badge/IA-agnóstico-purple?style=flat-square)](#compatibilidad)
+
 **Procedimiento portable para generar el sistema de diseño de cualquier proyecto, con cualquier IA.**
 
 Frontera es un archivo `.md` que le indica a cualquier IA cómo producir tu **Documento del Sistema de Diseño (DSD)** — la fuente de verdad visual y técnica para desarrolladores humanos y agentes de IA participantes en el desarrollo.
