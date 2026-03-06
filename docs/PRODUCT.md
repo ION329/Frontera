@@ -143,13 +143,15 @@ de dependencias externas.
 
 ## Dirección Futura
 
-Ideas validadas para versiones posteriores:
+Las mejoras identificadas están organizadas en tres categorías:
+mejoras a V1 (sin romper compatibilidad), funcionalidades para V2, y
+herramientas del ecosistema.
 
-- **Frontera V2** — Integración con herramientas de diseño (Figma API, Stitch MCP)
-  para extracción automatizada de tokens sin intervención manual.
-- **DSD como source of truth para CI/CD** — Validación automática de que los
-  tokens del código coinciden con el DSD en cada pull request.
-- **Frontera para equipos** — Manejo de múltiples DSDs por proyecto
-  (ej. web + mobile + email) con un `frontera.json` que los coordina.
-- **Modo Auditoría** — Ejecutar Frontera sobre un proyecto existente para detectar
-  desviaciones entre el DSD aprobado y el código actual.
+Ver el detalle completo en [ROADMAP.md](ROADMAP.md).
+
+**Highlights de mayor impacto:**
+- **Modo Auditoría (V2.1)** — Detecta desviaciones entre el DSD aprobado y el código actual
+- **Integración Figma API (V2.2)** — Extracción exacta de tokens sin depender de análisis visual
+- **DSD Comprimido (V1.3)** — Versión minificada del DSD optimizada para system prompts
+- **Modo Rebranding (V1.2)** — Flujo para reemplazos totales de identidad de marca
+- **GitHub Action DSD Sentinel (V2.3)** — Valida coherencia DSD ↔ código en cada PR

@@ -87,3 +87,4 @@ frontera/
 
 - [PRODUCT.md](docs/PRODUCT.md) — qué es Frontera, por qué existe y hacia dónde va
 - [ENGINEERING.md](docs/ENGINEERING.md) — arquitectura, decisiones técnicas, schemas de `frontera.json` y el DSD, guía para extender el procedimiento
+- [ROADMAP.md](docs/ROADMAP.md) — mejoras futuras con descripción, complejidad e impacto
