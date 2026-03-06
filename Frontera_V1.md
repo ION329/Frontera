@@ -7,9 +7,8 @@ proyecto — desde cero, con mockups existentes, con código ya escrito, o con a
 El DSD es la fuente de verdad visual y técnica para desarrolladores e IAs.
 
 **Preparación (una sola vez por proyecto):**
-1. Guarda este archivo (`Frontera_V1.md`) en `.frontera/` dentro de tu proyecto,
-   o consérvalo como archivo independiente para reutilizarlo en otros proyectos.
-2. Crea la carpeta `.frontera/` en la raíz de tu proyecto.
+1. Crea la carpeta `.frontera/` en la raíz de tu proyecto.
+2. Coloca este archivo (`Frontera_V1.md`) dentro de `.frontera/`.
 3. Si tienes logos, colócalos en `.frontera/logos/` con esta convención de nombres:
    - `logo-color.[ext]` → logo en colores corporativos
    - `logo-white.[ext]` → logo en blanco (si aplica)
@@ -19,8 +18,8 @@ El DSD es la fuente de verdad visual y técnica para desarrolladores e IAs.
 
 **Para ejecutar:**
 Dale el contenido de este archivo a una IA según tu entorno:
-- **Web** (Claude.ai, ChatGPT, Gemini) → sube este archivo como adjunto, o pega su contenido completo en el chat
-- **IDE** (Claude Code, Cursor) → abre este archivo y referencialo en tu mensaje
+- **Web** (Claude.ai, ChatGPT, Gemini) → sube `.frontera/Frontera_V1.md` como adjunto, o pega su contenido completo en el chat
+- **IDE** (Claude Code, Cursor) → referencia el archivo en tu mensaje: `@.frontera/Frontera_V1.md`
 - **API** → pega este contenido en el system prompt
 
 Luego dile:

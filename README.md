@@ -12,15 +12,15 @@ Frontera es un archivo `.md` que le indica a cualquier IA cómo producir tu **Do
 
 ## Inicio Rápido
 
-1. Descarga [`Frontera_V1.md`](Frontera_V1.md)
-2. Crea la carpeta `.frontera/` en la raíz de tu proyecto
+1. Crea la carpeta `.frontera/` en la raíz de tu proyecto
+2. Descarga [`Frontera_V1.md`](Frontera_V1.md) y colócalo dentro de `.frontera/`
 3. Dale el **contenido** del archivo a una IA según tu entorno:
 
 | Entorno | Cómo hacerlo |
 |---|---|
-| Claude.ai, ChatGPT, Gemini (web) | Sube `Frontera_V1.md` como adjunto, o pega su contenido completo en el chat |
-| Claude Code, Cursor (IDE) | Abre el archivo y referencialo en tu mensaje a la IA |
-| API / system prompt | Pega el contenido de `Frontera_V1.md` en el system prompt |
+| Claude.ai, ChatGPT, Gemini (web) | Sube `.frontera/Frontera_V1.md` como adjunto, o pega su contenido completo en el chat |
+| Claude Code, Cursor (IDE) | Referencia el archivo en tu mensaje: `@.frontera/Frontera_V1.md` |
+| API / system prompt | Pega el contenido de `.frontera/Frontera_V1.md` en el system prompt |
 
 4. Dile a la IA:
 
@@ -52,6 +52,7 @@ Al completar el procedimiento, tu proyecto tiene:
 proyecto/
 ├── DESIGN_SYSTEM.md        ← el DSD aprobado (ubicación elegida por el operador)
 └── .frontera/
+    ├── Frontera_V1.md      ← el procedimiento
     ├── frontera.json       ← registro de ejecuciones e historial
     ├── logos/              ← assets de logo por variante
     │   ├── logo-color.[ext]
