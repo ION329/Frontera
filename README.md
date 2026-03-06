@@ -14,17 +14,13 @@ Frontera es un archivo `.md` que le indica a cualquier IA cómo producir tu **Do
 
 1. Crea la carpeta `.frontera/` en la raíz de tu proyecto
 2. Descarga [`Frontera_V1.md`](Frontera_V1.md) y colócalo dentro de `.frontera/`
-3. Dale el **contenido** del archivo a una IA según tu entorno:
+3. Inicia la conversación con la IA según tu entorno:
 
-| Entorno | Cómo hacerlo |
+| Entorno | Qué hacer |
 |---|---|
-| Claude.ai, ChatGPT, Gemini (web) | Sube `.frontera/Frontera_V1.md` como adjunto, o pega su contenido completo en el chat |
-| Claude Code, Cursor (IDE) | Referencia el archivo en tu mensaje: `@.frontera/Frontera_V1.md` |
-| API / system prompt | Pega el contenido de `.frontera/Frontera_V1.md` en el system prompt |
-
-4. Dile a la IA:
-
-> *"Ejecuta el procedimiento Frontera V1."*
+| Claude.ai, ChatGPT, Gemini (web) | Adjunta `.frontera/Frontera_V1.md` al chat y escribe en el mismo mensaje: *"Ejecuta el procedimiento Frontera V1."* |
+| Claude Code, Cursor (IDE) | Escribe en el chat: `@.frontera/Frontera_V1.md ejecuta el procedimiento Frontera V1` |
+| API / system prompt | Pega el contenido de `.frontera/Frontera_V1.md` en el system prompt y envía como primer mensaje: *"Ejecuta el procedimiento Frontera V1."* |
 
 La IA guía el resto. Solo tendrás que responder preguntas y aprobar el resultado.
 
