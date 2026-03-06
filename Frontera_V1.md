@@ -64,7 +64,7 @@ Envía este mensaje al usuario en un solo bloque:
 > partimos:
 >
 > 1. ¿El proyecto ya tiene código con componentes de interfaz construidos?
-> 2. ¿Tienes archivos de diseño en `.frontera/mockups/`?
+> 2. ¿Tienes archivos de diseño (mockups, JPGs, PNGs, exports de Figma)?
 
 Según las respuestas, determina el punto de entrada y avanza a Fase 1:
 
@@ -154,8 +154,9 @@ Cuando tengas todas las respuestas, avanza a Fase 2.
 
 ### Entrada 2 — Con diseño existente
 
-Indica al usuario que coloque sus archivos en `.frontera/mockups/` y los adjunte
-a la conversación.
+Pide al usuario que adjunte sus archivos de diseño a la conversación. Si tiene
+acceso al sistema de archivos, indícale que los coloque también en `.frontera/mockups/`
+para mantener el registro organizado.
 
 Con las imágenes, extrae:
 - Paleta de colores con hex aproximados
@@ -199,7 +200,7 @@ Cuando tengas todo, avanza a Fase 2.
 
 Pide al usuario:
 1. Acceso al repositorio o fragmentos de código clave
-2. Las imágenes de los nuevos diseños en `.frontera/mockups/`
+2. Los archivos de diseño nuevos adjuntos a la conversación (y opcionalmente en `.frontera/mockups/`)
 
 **Del código, extrae:**
 - Tokens en uso: colores (hex y nombre de variable), tipografía, espaciado
