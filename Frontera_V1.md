@@ -18,7 +18,12 @@ El DSD es la fuente de verdad visual y técnica para desarrolladores e IAs.
 4. Si tienes mockups o imágenes de diseño, colócalos en `.frontera/mockups/`.
 
 **Para ejecutar:**
-Comparte este archivo con cualquier IA (Claude, GPT, Gemini, u otra) y dile:
+Dale el contenido de este archivo a una IA según tu entorno:
+- **Web** (Claude.ai, ChatGPT, Gemini) → sube este archivo como adjunto, o pega su contenido completo en el chat
+- **IDE** (Claude Code, Cursor) → abre este archivo y referencialo en tu mensaje
+- **API** → pega este contenido en el system prompt
+
+Luego dile:
 > *"Ejecuta el procedimiento Frontera V1."*
 
 La IA guía el resto. Solo tendrás que responder sus preguntas y aprobar el resultado.
