@@ -1,22 +1,34 @@
 # Frontera — Roadmap
 
-Este documento registra las mejoras identificadas para versiones futuras del
-procedimiento. Cada entrada incluye el problema que resuelve, el enfoque propuesto
-y una estimación de complejidad e impacto.
-
-Las ideas aquí documentadas surgen de evaluaciones críticas del procedimiento,
-casos de uso reales y limitaciones conocidas de V1.
+Este documento registra el estado de mejoras al procedimiento, organizadas
+entre implementadas y pendientes.
 
 ---
 
-## Mejoras a V1 (sin cambio de versión mayor)
+## Implementado en V1
+
+| ID | Descripción | Notas de implementación |
+|---|---|---|
+| V1.1 | Detección de tipo de proyecto | Q3 en Fase 0. El tipo guía los componentes mínimos en Fase 2. |
+| V1.2 | Modo Rebranding | Opción 5 en Modo Actualización. Versión sube a major. Preserva §4, §6, §7. |
+| V1.3 | DSD Comprimido | Oferta de `DESIGN_SYSTEM_MINI.md` siempre al final de Fase 3. |
+| V1.4 | Manejo de equipos (parcial) | Campo `autor` en historial, detectado de `git config user.name`. Reconciliación remota/local queda pendiente. |
+| V2.4 | Multi-DSD (base) | Q4 en Fase 0. Schema `dsds[]` en `frontera.json`. Modo Actualización selecciona DSD activo. Propagación entre DSDs queda pendiente. |
+| — | Health Score | Diagnóstico de completitud en Fase 3: ✅ = 12.5 · ⚠️ = 6 · ❌ = 0. Las secciones §2, §3, §4 y §8 son críticas. |
+| — | Aprobación condicional | Tres caminos según Health Score: completar ahora / aprobar con advertencia / dejar como borrador. |
+| — | Oferta de UI Kit | Al aprobar con 100/100, oferta de generar el UI Kit base desde el DSD aprobado. |
+| — | Defaults de framework | En E3/E4, cuando no hay escala tipográfica/espaciado personalizada, el procedimiento pregunta y documenta los defaults como `[default nombre-del-framework]`. |
+
+---
+
+## Mejoras a V1 (pendientes)
 
 Estas mejoras no rompen compatibilidad y pueden incorporarse al procedimiento
 actual como actualizaciones menores.
 
 ---
 
-### V1.1 — Detección inteligente de tipo de proyecto
+### V1.1 — Detección inteligente de tipo de proyecto *(implementado)*
 
 **Problema:** Los componentes mínimos por tipo de proyecto (web, dashboard,
 móvil, landing) son una heurística fija. El procedimiento no detecta el tipo
@@ -30,7 +42,7 @@ esta dimensión sin añadir una nueva entrada.
 
 ---
 
-### V1.2 — Modo Rebranding
+### V1.2 — Modo Rebranding *(implementado)*
 
 **Problema:** Existe un escenario real no cubierto por las 4 entradas: el proyecto
 tiene un DSD aprobado pero el cliente hace un rebranding completo (nueva paleta,
@@ -46,7 +58,7 @@ secciones de identidad y color. La versión sube a major (1.x → 2.0).
 
 ---
 
-### V1.3 — DSD Comprimido para System Prompts
+### V1.3 — DSD Comprimido para System Prompts *(implementado)*
 
 **Problema:** El DSD completo puede superar los 2,000 tokens. En proyectos donde
 la IA de desarrollo lo recibe como parte de un system prompt junto a otras
@@ -61,7 +73,7 @@ exclusivamente al consumo por IAs, no como documentación humana.
 
 ---
 
-### V1.4 — Manejo de Equipos
+### V1.4 — Manejo de Equipos *(parcialmente implementado)*
 
 **Problema:** Cuando múltiples personas ejecutan Frontera sobre el mismo proyecto
 (ej. un diseñador y un desarrollador), pueden generarse versiones paralelas del
@@ -159,7 +171,7 @@ jobs:
 
 ---
 
-### V2.4 — Multi-DSD por Proyecto
+### V2.4 — Multi-DSD por Proyecto *(base implementada)*
 
 **Problema:** Proyectos grandes (ej. plataforma web + app móvil + sistema de
 emails) tienen sistemas de diseño parcialmente compartidos y parcialmente
@@ -243,16 +255,16 @@ en la sección 7, sin depender de la IA.
 
 ## Tabla Resumen
 
-| ID | Descripción | Complejidad | Impacto | Versión objetivo |
+| ID | Descripción | Complejidad | Impacto | Estado |
 |---|---|---|---|---|
-| V1.1 | Detección de tipo de proyecto | Baja | Medio | V1.x |
-| V1.2 | Modo Rebranding | Baja | Alto | V1.x |
-| V1.3 | DSD Comprimido para system prompts | Baja | Alto | V1.x |
-| V1.4 | Manejo de equipos | Media | Medio | V1.x |
-| V2.1 | Modo Auditoría | Media | Muy alto | V2 |
-| V2.2 | Integración Figma API | Alta | Muy alto | V2 |
-| V2.3 | GitHub Action: DSD Sentinel | Alta | Alto | V2 |
-| V2.4 | Multi-DSD por proyecto | Alta | Alto | V2 |
-| ECO-1 | Frontera CLI | Media | Medio | Ecosistema |
-| ECO-2 | DSD Linter | Baja | Medio | Ecosistema |
-| ECO-3 | Exportador de Tokens | Media | Alto | Ecosistema |
+| V1.1 | Detección de tipo de proyecto | Baja | Medio | ✅ Implementado |
+| V1.2 | Modo Rebranding | Baja | Alto | ✅ Implementado |
+| V1.3 | DSD Comprimido para system prompts | Baja | Alto | ✅ Implementado |
+| V1.4 | Manejo de equipos | Media | Medio | ⚠️ Parcial (autor vía git) |
+| V2.1 | Modo Auditoría | Media | Muy alto | Pendiente V2 |
+| V2.2 | Integración Figma API | Alta | Muy alto | Pendiente V2 |
+| V2.3 | GitHub Action: DSD Sentinel | Alta | Alto | Pendiente V2 |
+| V2.4 | Multi-DSD por proyecto | Alta | Alto | ⚠️ Base implementada |
+| ECO-1 | Frontera CLI | Media | Medio | Pendiente |
+| ECO-2 | DSD Linter | Baja | Medio | Pendiente |
+| ECO-3 | Exportador de Tokens | Media | Alto | Pendiente |

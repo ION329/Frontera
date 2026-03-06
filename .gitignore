@@ -11,3 +11,4 @@ desktop.ini
 
 # Cuando se use Frontera en este mismo repo (dogfooding)
 .frontera/mockups/
+/test_use

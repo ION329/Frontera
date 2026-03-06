@@ -61,8 +61,16 @@ Envía este mensaje al usuario en un solo bloque:
 >
 > 1. ¿El proyecto ya tiene código con componentes de interfaz construidos?
 > 2. ¿Tienes archivos de diseño (mockups, JPGs, PNGs, exports de Figma)?
+> 3. ¿Qué tipo de proyecto es?
+>    - **Web app** — aplicación con múltiples vistas y flujos
+>    - **Dashboard / admin** — panel con tablas, métricas y gestión de datos
+>    - **App móvil** — interfaz nativa o PWA para dispositivos móviles
+>    - **Landing estática** — página de marketing o presentación
+>    - **Otro** — describe brevemente
+> 4. ¿Este proyecto tendrá un solo sistema de diseño o varios por plataforma?
+>    (ej. web + mobile, admin + público) — responde "uno" si no estás seguro.
 
-Según las respuestas, determina el punto de entrada y avanza a Fase 1:
+Según las respuestas 1 y 2, determina el punto de entrada y avanza a Fase 1:
 
 | Condición | Entrada |
 |---|---|
@@ -71,6 +79,9 @@ Según las respuestas, determina el punto de entrada y avanza a Fase 1:
 | Con código, sin diseño | 3 |
 | Con código y con diseño | 4 |
 
+Guarda el tipo de proyecto (Q3) y la configuración multi-DSD (Q4) para usarlos
+en Fase 2. Si el tipo no puede inferirse de Q3, dedúcelo del contexto del proyecto.
+
 ---
 
 ## Modo Actualización
@@ -78,23 +89,27 @@ Según las respuestas, determina el punto de entrada y avanza a Fase 1:
 *Se activa cuando existe `.frontera/frontera.json`.*
 
 **Paso 1 — Leer el registro y presentar el estado actual:**
-Con los datos del JSON, envía este resumen al usuario:
+Si el registro tiene múltiples DSDs en el array `dsds`, pregunta primero cuál
+actualizar antes de continuar.
+
+Con los datos del registro, envía este resumen al usuario:
 
 > Encontré el registro de Frontera para este proyecto:
 >
 > - **Proyecto:** [proyecto]
 > - **DSD:** [dsd_location] — v[dsd_version] ([dsd_status])
-> - **Última ejecución:** [ultima_ejecucion]
+> - **Última ejecución:** [ultima_ejecucion] *(por [autor del último historial])*
 > - **Historial:** [N] ejecuciones previas
 >
-> ¿Qué quieres actualizar?
+> ¿Qué quieres hacer?
 >
 > 1. Llegaron nuevos archivos de diseño en `.frontera/mockups/`
 > 2. Hubo cambios específicos (colores, tipografía, componentes, etc.)
 > 3. El código evolucionó — hay componentes nuevos o modificados
 > 4. Revisión general — quiero mejorar o completar secciones incompletas
+> 5. **Rebranding completo** — nueva identidad de marca (paleta, tipografía, logo)
 >
-> Puedes combinar varias opciones.
+> Puedes combinar las opciones 1 a 4. La opción 5 es excluyente.
 
 **Paso 2 — Cargar el DSD:**
 Accede al DSD en la ruta indicada por `dsd_location`. Si no tienes acceso
@@ -106,6 +121,11 @@ Según la respuesta del usuario, extrae solo lo que cambió:
 - Opción 2 → Pregunta exactamente qué valores cambiaron y cuáles son los nuevos
 - Opción 3 → Pide los archivos de código nuevos o modificados y extrae tokens y patrones
 - Opción 4 → Revisa el DSD sección por sección e identifica campos `[pendiente]` o inconsistencias
+- Opción 5 (Rebranding) → Aplica el flujo de entrada que corresponda según el
+  material disponible (1, 2 o 3), pero **solo para §1 Identidad, §2 Color y
+  §3 Tipografía**. Conserva intactos §4 Espaciado, §6 Componentes y §7 Stack.
+  Actualiza §8 solo en los tokens que cambien. Informa al usuario antes de
+  continuar: *"El rebranding reemplazará §1, §2 y §3. §4, §6 y §7 se conservan."*
 
 **Paso 4 — Presentar el diff:**
 Antes de aplicar cualquier cambio, presenta una tabla con todo lo que va a modificarse:
@@ -118,7 +138,8 @@ Espera aprobación. Si el usuario rechaza algún cambio, retíralo antes de cont
 
 **Paso 5 — Aplicar y versionar:**
 - Aplica únicamente los cambios aprobados en el DSD
-- Incrementa la versión menor: `1.0 → 1.1`, `1.1 → 1.2`, etc.
+- Opciones 1–4: incrementa la versión menor (`1.0 → 1.1`, `1.1 → 1.2`, etc.)
+- Opción 5 (Rebranding): sube a versión major (`1.x → 2.0`, `2.x → 3.0`)
 - Actualiza `fecha` con la fecha actual
 - Restablece `estado: borrador`
 
@@ -185,8 +206,16 @@ Del código, extrae:
 Luego pregunta **solo lo que el código no pueda responder**:
 - Intención de marca e identidad si no está documentada
 - Colores o componentes que faltan pero son necesarios
+- Si la tipografía o el espaciado no tienen valores personalizados en el código,
+  pregunta: *"No encontré una escala tipográfica ni de espaciado personalizada.
+  ¿El proyecto usa los defaults del framework, o tienes valores definidos fuera
+  del código (Figma, documento, convención del equipo)?"*
+  - Si confirma defaults → documenta la escala base del framework marcando
+    cada valor como `[default nombre-del-framework]`
+  - Si tiene valores propios → pídelos antes de continuar
 
-Regla: no inventes valores que no estén en el código.
+Regla: no inventes valores que no estén en el código ni en los defaults
+confirmados del framework.
 
 Cuando tengas todo, avanza a Fase 2.
 
@@ -202,6 +231,9 @@ Pide al usuario:
 - Tokens en uso: colores (hex y nombre de variable), tipografía, espaciado
 - Patrones de componentes existentes: estructura, variantes, estados
 - Stack tecnológico confirmado
+- Si la tipografía o el espaciado no están personalizados, aplica la misma
+  regla que Entrada 3: pregunta si son defaults del framework y documéntalos
+  como `[default nombre-del-framework]`
 
 **De las imágenes, extrae:**
 - Paleta de colores con hex aproximados
@@ -241,11 +273,22 @@ acceso a ella, usa ese formato como placeholder.
 hay logos, deja la tabla con una fila marcada como `[pendiente]`.
 
 **Componentes mínimos:** Documenta todos los componentes mencionados por el usuario.
-Añade los fundamentales según el tipo de proyecto:
-- Interfaz web → Button, Input
-- Dashboard → Button, Input, Card, Table
+Añade los fundamentales según el tipo de proyecto detectado en Fase 0 (Q3):
+- Web app → Button, Input
+- Dashboard / admin → Button, Input, Card, Table
 - App móvil → Button, Input, NavigationBar
 - Landing estática → Button, Hero, Footer
+- Otro → Button, Input como mínimo
+
+**Secciones críticas** — deben estar completamente llenas para que el DSD sea
+accionable. Prioriza completarlas durante la extracción antes de llegar a Fase 3:
+- § 2 Sistema de Color — todos los roles con hex confirmado
+- § 3 Tipografía — todos los tokens con tamaño, peso y line-height
+- § 4 Espaciado — unidad base, escala y breakpoints
+- § 8 Tokens — debe cubrir todos los valores de §2, §3 y §4
+
+**Secciones informativas** — importantes pero no bloquean la construcción:
+§ 1 Identidad, § 5 Tono y Principios, § 6 Componentes, § 7 Stack
 
 **Plantilla obligatoria — completa todos los campos con los datos recopilados:**
 
@@ -363,25 +406,53 @@ Antes de guardar, envía este mensaje al usuario:
 - Si no tienes acceso, muestra el DSD completo en un bloque de código e indica
   al usuario que lo guarde manualmente en esa ruta.
 
-**Paso 3 — Checklist de revisión:**
-Presenta solo los ítems aplicables — omite los que correspondan a secciones
-en `[pendiente]` o que no apliquen al flujo usado:
+**Paso 3 — Health Score:**
+Evalúa cada sección del DSD y clasifícala:
+- ✅ **Completo** — sin campos `[pendiente]`
+- ⚠️ **Parcial** — uno o más campos en `[pendiente]` pero la sección tiene contenido útil
+- ❌ **Incompleto** — la mayoría de campos en `[pendiente]`
 
-> El borrador está en `[ruta]`. Ábrelo y revisa:
->
-> - [ ] **Colores:** ¿Los valores hex son exactos o aproximaciones? *(omitir si todos son `[pendiente]`)*
-> - [ ] **Tipografía:** ¿Las fuentes nombradas son las reales? *(omitir si está en `[pendiente]`)*
-> - [ ] **Logos:** ¿Las variantes documentadas son correctas? *(omitir si no hay logos)*
-> - [ ] **Stack:** ¿Está completo y correcto? *(omitir si está en `[pendiente]`)*
-> - [ ] **Tokens:** ¿El formato es el correcto para tu stack? *(omitir si el stack no fue declarado)*
-> - [ ] **Pendientes:** ¿Hay campos `[pendiente]` que puedas completar ahora?
-> - [ ] **Conflictos:** ¿Todos fueron resueltos? *(solo para Entrada 4)*
->
-> Responde con correcciones específicas o escribe **"aprobado"**.
+Health Score: ✅ = 12.5 pts · ⚠️ = 6 pts · ❌ = 0 pts (máx. 100).
+El DSD es **apto para UI Kit** solo si §2, §3, §4 y §8 son todas ✅.
 
-**Ciclo de corrección:** Si el usuario indica correcciones, actualiza únicamente
-los campos señalados en el archivo (o en el bloque de código) y confirma los
-cambios. Repite hasta recibir aprobación explícita.
+Presenta el diagnóstico:
+
+> ## Estado del DSD — [Proyecto] v[X.X]
+>
+> | Sección | Estado | Crítica |
+> |---|---|---|
+> | 1. Identidad | [estado] | — |
+> | 2. Color | [estado] | ⚠️ Sí |
+> | 3. Tipografía | [estado] | ⚠️ Sí |
+> | 4. Espaciado | [estado] | ⚠️ Sí |
+> | 5. Tono y Principios | [estado] | — |
+> | 6. Componentes | [estado] | — |
+> | 7. Stack | [estado] | — |
+> | 8. Tokens | [estado] | ⚠️ Sí |
+>
+> **Health Score: [N]/100** — [✅ Apto para UI Kit / ⚠️ No apto para UI Kit]
+
+**Paso 4 — Decisión:**
+
+**Si todas las secciones críticas son ✅:** pregunta directamente:
+> El DSD está completo. ¿Lo apruebas?
+
+**Si hay secciones críticas ⚠️ o ❌:** presenta las opciones:
+> Hay secciones críticas incompletas: [lista]. ¿Qué prefieres?
+>
+> 1. **Completar ahora** — te hago las preguntas que faltan
+> 2. **Aprobar con advertencia** — queda aprobado pero no es apto para UI Kit hasta completar las secciones pendientes
+> 3. **Dejar como borrador** — continuar después desde Modo Actualización
+
+- Si elige **1**: formula las preguntas necesarias para cada campo `[pendiente]`
+  de las secciones críticas, actualiza el DSD y el archivo guardado, recalcula
+  el Health Score y regresa al inicio de Paso 4.
+- Si elige **2** o **3**: procede según lo indicado, nota en el frontmatter del
+  DSD las secciones pendientes.
+
+**Ciclo de corrección:** Si el usuario indica correcciones sobre cualquier
+sección, actualiza únicamente los campos señalados en el archivo y confirma
+los cambios antes de continuar.
 
 **Al aprobar:**
 1. Actualiza `estado: borrador → aprobado` en el frontmatter del DSD.
@@ -391,28 +462,91 @@ cambios. Repite hasta recibir aprobación explícita.
 {
   "procedimiento": "Frontera V1",
   "proyecto": "[nombre del proyecto]",
-  "dsd_location": "[ruta relativa al DESIGN_SYSTEM.md]",
-  "dsd_version": "[versión aprobada]",
-  "dsd_status": "aprobado",
+  "tipo": "[web | dashboard | mobile | landing | otro]",
+  "dsds": [
+    {
+      "id": "[identificador — ej. principal, web, mobile]",
+      "nombre": "[nombre legible del DSD]",
+      "dsd_location": "[ruta relativa al DESIGN_SYSTEM.md]",
+      "dsd_version": "[versión aprobada]",
+      "dsd_status": "aprobado"
+    }
+  ],
   "creado": "[fecha de la primera ejecución]",
   "ultima_ejecucion": "[fecha actual]",
   "historial": [
     {
       "fecha": "[fecha]",
-      "modo": "creacion | actualizacion",
+      "dsd_id": "[id del DSD afectado]",
+      "modo": "creacion | actualizacion | rebranding",
       "entrada": "[1 | 2 | 3 | 4 | actualizacion]",
       "version_resultante": "[versión]",
+      "autor": "[git config user.name, o nombre mencionado, o 'no especificado']",
       "resumen": "[descripción breve de lo que se generó o cambió]"
     }
   ]
 }
 ```
 
-Si el archivo ya existe, agrega la nueva entrada al array `historial` sin
-eliminar las anteriores. Actualiza `dsd_version`, `dsd_status` y `ultima_ejecucion`.
+Si el archivo ya existe, agrega la nueva entrada al array `historial` sin eliminar
+las anteriores. Actualiza `dsd_version`, `dsd_status` y `ultima_ejecucion` dentro
+del objeto correspondiente en el array `dsds`.
+
+**Compatibilidad con schema anterior:** Si el archivo usa el formato previo (con
+`dsd_location`, `dsd_version`, `dsd_status` a nivel raíz), migralo automáticamente
+al nuevo formato: mueve esos campos a `dsds[0]` con `id: "principal"` y `nombre`
+igual al nombre del proyecto.
 
 Si no tienes acceso al sistema de archivos, muestra el JSON generado al usuario
 e indícale que lo guarde como `.frontera/frontera.json`.
+
+**Oferta de UI Kit:**
+Si el DSD fue aprobado con Health Score = 100 (todas las secciones ✅), envía:
+
+> El DSD está completo y aprobado. ¿Quieres que genere el UI Kit base para
+> este proyecto?
+>
+> El UI Kit incluirá los componentes documentados en §6, configurados con los
+> tokens de §8, listos para implementar en [stack declarado en §7].
+
+Si el usuario acepta, genera el UI Kit usando exclusivamente los valores del
+DSD aprobado. No introduzcas valores, componentes ni patrones que no estén
+documentados en él.
+
+**Oferta de DSD Comprimido:**
+Independientemente del Health Score, ofrece siempre:
+
+> ¿Quieres generar también `DESIGN_SYSTEM_MINI.md`?
+>
+> Es una versión condensada del DSD con solo los tokens esenciales, sin
+> descripciones extendidas. Ideal para usarla como contexto en system prompts.
+
+Si el usuario acepta, genera el archivo con este formato (solo los campos que
+estén completos — omite los que sean `[pendiente]`):
+
+```
+# [Proyecto] — Design System Mini v[versión]
+
+Stack: [framework] + [estilos] + [lenguaje]
+
+Colores:
+  primario=[hex] · secundario=[hex] · acento=[hex]
+  fondo=[hex] · superficie=[hex] · texto=[hex]
+  éxito=[hex] · error=[hex] · advertencia=[hex]
+
+Fuentes: [Fuente principal] ([uso]) · [Fuente secundaria] ([uso])
+
+Escala tipográfica:
+  H1=[tamaño]/[peso] · H2=[tamaño]/[peso] · H3=[tamaño]/[peso]
+  Body=[tamaño]/[peso] · Small=[tamaño]/[peso]
+
+Espaciado: base=[px] — escala: [4, 8, 12, 16, 24, 32, 48, 64]
+Breakpoints: mobile<[px] · tablet=[px]–[px] · desktop>[px]
+
+Componentes: [lista separada por comas]
+
+Restricciones: [restricciones clave del stack y componentes]
+```
 
 ---
 

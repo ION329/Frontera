@@ -40,9 +40,9 @@ rompería la portabilidad.
         SÍ              NO
          │              │
          ▼              ▼
-   Modo              Preguntas de
-Actualización        diagnóstico
-         │          (2 preguntas)
+   Modo              4 preguntas:
+Actualización        Q1 código, Q2 diseño,
+(opción 1–5)         Q3 tipo, Q4 multi-DSD
          │              │
          │         Routing matrix
          │         (Entradas 1–4)
@@ -58,18 +58,27 @@ Actualización        diagnóstico
           del DSD completo
                 │
                 ▼
-          Fase 3: Validación
-          + ciclo corrección
+      Fase 3: Guardar borrador
+      Preguntar ubicación →
+      Escribir archivo draft
                 │
-          ¿Aprobado?
+                ▼
+          Health Score
+      (diagnóstico por sección)
+                │
+          ¿Críticas ✅?
          │              │
         NO              SÍ
          │              │
-    Corrección    estado: aprobado
-    + checklist   Escribe frontera.json
+    3 opciones:    "¿Lo apruebas?"
+    completar /         │
+    advertencia /       ▼
+    borrador     estado: aprobado
+                 Escribe frontera.json
                         │
                         ▼
-                  [DSD guardado]
+                 Oferta UI Kit (si 100/100)
+                 Oferta DSD Mini (siempre)
 ```
 
 ---
@@ -155,6 +164,14 @@ Los campos más susceptibles a alucinación (hex colors, nombres de fuentes)
 tienen ítems explícitos en el checklist. El operador no puede aprobar el DSD
 sin haberse detenido a verificarlos.
 
+**5. Defaults de framework como alternativa a `[pendiente]`**
+En Entradas 3 y 4, cuando la tipografía o el espaciado no tienen valores
+personalizados en el código, el procedimiento pregunta si son defaults del
+framework. Si el usuario confirma, se documentan como `[default tailwind]`
+(o el framework que corresponda), en lugar de dejar `[pendiente]`. Esto cierra
+el vector de alucinación más común en proyectos con Tailwind CSS u otros
+frameworks de utilidades.
+
 ---
 
 ## Schema: `frontera.json`
@@ -163,17 +180,26 @@ sin haberse detenido a verificarlos.
 {
   "procedimiento": "Frontera V1",
   "proyecto": "string — nombre del proyecto",
-  "dsd_location": "string — ruta relativa al DESIGN_SYSTEM.md desde la raíz del proyecto",
-  "dsd_version": "string — versión semver simplificada, ej. '1.0', '1.3'",
-  "dsd_status": "string — 'borrador' | 'aprobado'",
+  "tipo": "string — 'web' | 'dashboard' | 'mobile' | 'landing' | 'otro'",
+  "dsds": [
+    {
+      "id": "string — identificador único, ej. 'principal', 'web', 'mobile'",
+      "nombre": "string — nombre legible del DSD",
+      "dsd_location": "string — ruta relativa al DESIGN_SYSTEM.md desde la raíz del proyecto",
+      "dsd_version": "string — versión semver simplificada, ej. '1.0', '1.3'",
+      "dsd_status": "string — 'borrador' | 'aprobado'"
+    }
+  ],
   "creado": "string — fecha ISO 8601 de la primera ejecución (YYYY-MM-DD)",
   "ultima_ejecucion": "string — fecha ISO 8601 de la última ejecución",
   "historial": [
     {
       "fecha": "string — YYYY-MM-DD",
-      "modo": "string — 'creacion' | 'actualizacion'",
+      "dsd_id": "string — id del DSD afectado en esta ejecución",
+      "modo": "string — 'creacion' | 'actualizacion' | 'rebranding'",
       "entrada": "string — '1' | '2' | '3' | '4' | 'actualizacion'",
       "version_resultante": "string — versión del DSD producida en esta ejecución",
+      "autor": "string — de git config user.name, nombre mencionado, o 'no especificado'",
       "resumen": "string — descripción breve de lo generado o modificado"
     }
   ]
@@ -181,11 +207,19 @@ sin haberse detenido a verificarlos.
 ```
 
 **Reglas de escritura:**
+- `tipo` se establece en la primera ejecución desde Q3 de Fase 0 y no cambia.
 - `creado` se establece en la primera ejecución y nunca se modifica.
 - `ultima_ejecucion` se actualiza en cada aprobación.
 - `historial` es append-only. No se eliminan entradas anteriores.
-- `dsd_status` vuelve a `borrador` al iniciar cualquier actualización
-  y regresa a `aprobado` al completar la validación.
+- `dsd_status` (dentro de `dsds[]`) vuelve a `borrador` al iniciar cualquier
+  actualización y regresa a `aprobado` al completar la validación.
+- Proyectos con un solo DSD tienen un array `dsds[]` con un único elemento
+  de `id: "principal"`.
+
+**Compatibilidad con schema anterior (pre Multi-DSD):**
+Si el archivo contiene `dsd_location`, `dsd_version`, `dsd_status` a nivel raíz,
+migrarlo automáticamente: mover esos campos a `dsds[0]` con `id: "principal"`
+y `nombre` igual al nombre del proyecto.
 
 ---
 
@@ -255,7 +289,9 @@ debe volver a ejecutar Frontera para generar esa sección.
 - El sistema de 4 entradas basado en {código, diseño}
 - La obligatoriedad de la reconciliación en Entrada 4
 - Los mecanismos anti-alucinación (`[pendiente]`, prohibición de invención, checklist)
-- El schema de `frontera.json` (solo extender, nunca romper campos existentes)
+- El schema de `frontera.json` (solo extender, nunca romper campos existentes;
+  `dsds[]` es la estructura canónica — proyectos de un solo DSD tienen un array
+  con un elemento)
 
 ### Cómo añadir una nueva Entrada
 1. Identificar el nuevo estado del proyecto que no cubre ninguna entrada existente.
@@ -280,6 +316,23 @@ debe volver a ejecutar Frontera para generar esa sección.
 ---
 
 ## Changelog
+
+### Frontera V1.x (2026-03-06, iteraciones post-lanzamiento)
+
+**Mejoras incorporadas tras la primera ejecución real (proyecto SANAP):**
+- Fase 0: pregunta 2 ahora pregunta por archivos de diseño en general, no asume `.frontera/mockups/` ya existente
+- Entradas 2 y 4: adjuntar archivos primero, organizar en `.frontera/mockups/` es opcional
+- Fase 3: nuevo flujo de 4 pasos — preguntar ubicación → guardar borrador → Health Score → aprobación condicional
+- Health Score: diagnóstico de completitud por sección con puntuación /100
+- Aprobación condicional: tres caminos según secciones críticas (§2, §3, §4, §8)
+- Defaults de framework: mecanismo anti-alucinación #5 para tipografía/espaciado en E3/E4
+- Oferta de UI Kit al aprobar con 100/100
+- Oferta de `DESIGN_SYSTEM_MINI.md` siempre al final de Fase 3
+- Fase 0: Q3 (tipo de proyecto) y Q4 (multi-DSD)
+- Modo Actualización: opción 5 Rebranding con versión a major
+- Schema `frontera.json`: migrado a `dsds[]`, añadidos `tipo`, `autor`, `dsd_id`, modo `rebranding`
+- Guía de Uso: instrucciones de ejecución consolidadas en una sola acción por entorno
+- `Frontera_V1.md` ahora vive en `.frontera/` dentro del proyecto del usuario
 
 ### Frontera V1 (2026-03-06)
 Primera versión estable del procedimiento.
